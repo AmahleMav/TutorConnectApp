@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/item_background">
+
+    <!-- Tutor Name -->
+    <TextView
+        android:id="@+id/txtTutorName"
+        android:text="Tutor: John Doe"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Tutor Email -->
+    <TextView
+        android:id="@+id/txtTutorEmail"
+        android:text="Email: tutor@gmail.com"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Day of Session -->
+    <TextView
+        android:id="@+id/txtDay"
+        android:text="Day: Thursday"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Date of Session -->
+    <TextView
+        android:id="@+id/txtDate"
+        android:text="Date of Session: 30/10/2025"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/txtTime"
+        android:text="Time: 08:00 - 09:00"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Session Type -->
+    <TextView
+        android:id="@+id/txtType"
+        android:text="Type: One-on-One"
+        android:textSize="14sp"
+        android:textColor="#388E3C"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Amount Paid -->
+    <TextView
+        android:id="@+id/txtAmount"
+        android:text="Amount: R380"
+        android:textSize="14sp"
+        android:textColor="#212121"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Status -->
+    <TextView
+        android:id="@+id/txtStatus"
+        android:text="Status: Upcoming"
+        android:textSize="14sp"
+        android:textColor="#1976D2"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

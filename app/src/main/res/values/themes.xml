@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ✅ Use MaterialComponents instead of AppCompat -->
+    <style name="Theme.TutorConnect" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- 🎨 Primary colors -->
+        <item name="colorPrimary">@color/teal_700</item>
+        <item name="colorPrimaryVariant">@color/teal_200</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <!-- 🌈 Secondary colors -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorOnSecondary">@android:color/black</item>
+
+        <!-- 🪄 Background color -->
+        <item name="android:windowBackground">@color/white</item>
+
+        <!-- 🧭 Status bar color -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- ✍️ Use Material text styles -->
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MaterialComponents.Headline6</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
+        <item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
+
+    </style>
+  <!-- Base application theme. -->
+    <style name="Base.Theme.TutorConnect" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+</resources>

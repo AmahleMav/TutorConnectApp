@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@drawable/item_background">
+
+    <!-- Reviewer Name -->
+    <TextView
+        android:id="@+id/txtReviewer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Student Name"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <!-- Review Date -->
+
+    <!-- Review Comment -->
+    <TextView
+        android:id="@+id/txtComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Great tutor!"
+        android:textColor="@color/gray"
+        android:textSize="15sp"
+        android:layout_marginTop="4dp"
+        android:lineSpacingExtra="2dp" />
+
+    <!-- Rating Bar (now at bottom) -->
+    <RatingBar
+        android:id="@+id/ratingBarReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:rating="4.5"
+        android:isIndicator="true"
+        android:stepSize="0.5"
+        android:layout_marginTop="6dp"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:progressTint="@color/gold"
+        android:secondaryProgressTint="@color/gold"
+        android:thumbTint="@color/gold" />
+
+</LinearLayout>

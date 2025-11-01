@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "587133199827",
+    "project_id": "tutorconnect-5e101",
+    "storage_bucket": "tutorconnect-5e101.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587133199827:android:ba8d008ffb4378e0847b26",
+        "android_client_info": {
+          "package_name": "com.example.tutorconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_y3KaaoAZttYq8KeZBpkIPD-6QkPy2Eg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587133199827:android:710537c4dab7e102847b26",
+        "android_client_info": {
+          "package_name": "student.projects.tutorconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_y3KaaoAZttYq8KeZBpkIPD-6QkPy2Eg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587133199827:android:2775601ee694665a847b26",
+        "android_client_info": {
+          "package_name": "vcmsa.projects.tutorconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_y3KaaoAZttYq8KeZBpkIPD-6QkPy2Eg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TutorConnect">
+        <activity
+            android:name="Views.tutor.HoursLogActivity"
+            android:exported="false" />
+        <activity
+            android:name="Views.tutor.AvailabilityActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TutorConnect" />
+        <activity
+            android:name="Views.shared.ChatDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Views.student.TutorTimeSlotsActivity"
+            android:exported="false" />
+        <activity
+            android:name="Views.student.TutorProfileActivity"
+            android:exported="false"
+            android:label="Tutor Profile"
+            android:theme="@style/Theme.TutorConnect" />
+        <activity
+            android:name=".ui.Login"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.TutorConnect">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.Register"
+            android:exported="false"
+            android:label="Register"
+            android:theme="@style/Theme.TutorConnect" /> <!-- Student Dashboard -->
+        <activity
+            android:name=".Views.student.StudentDashboard"
+            android:exported="false"
+            android:label="Student Dashboard"
+            android:theme="@style/Theme.TutorConnect" /> <!-- Tutor Dashboard -->
+        <activity
+            android:name=".Views.tutor.TutorDashboard"
+            android:exported="false"
+            android:label="Tutor Dashboard"
+            android:theme="@style/Theme.TutorConnect" /> <!-- Admin Dashboard -->
+        <activity
+            android:name=".Views.admin.AdminDashboard"
+            android:exported="false"
+            android:label="Admin Dashboard"
+            android:theme="@style/Theme.TutorConnect" /> <!-- MainActivity can stay if needed later -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.TutorConnect" />
+    </application>
+
+</manifest>

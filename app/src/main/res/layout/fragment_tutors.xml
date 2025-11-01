@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FAFAFA">
+
+    <TextView
+        android:id="@+id/tvTutorsTitle"
+        android:text="Available Tutors"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="#212121" />
+
+    <!-- Search bar -->
+    <EditText
+        android:id="@+id/etSearchTutors"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Search tutors..."
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/search_bar_background"
+        android:drawablePadding="8dp"
+        android:inputType="text"
+        android:imeOptions="actionSearch" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- RecyclerView for actual tutor data -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTutors"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:overScrollMode="never"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp" />
+
+        <!-- Shimmer placeholder container -->
+        <LinearLayout
+            android:id="@+id/shimmerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Show 3 shimmer placeholder cards -->
+            <include layout="@layout/item_tutor_shimmer" />
+            <include layout="@layout/item_tutor_shimmer" />
+            <include layout="@layout/item_tutor_shimmer" />
+            <include layout="@layout/item_tutor_shimmer" />
+            <include layout="@layout/item_tutor_shimmer" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

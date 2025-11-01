@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/item_background"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/imgTutor"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:clipToOutline="true"
+        android:background="@drawable/profile_placeholder_background"
+        android:contentDescription="@string/tutor_image"
+        android:src="@drawable/ic_person" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingStart="12dp">
+
+        <TextView
+            android:id="@+id/txtTutorName"
+            android:text="Tutor Name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTutorExpertise"
+            android:text="Expertise: Mathematics"
+            android:textSize="15sp"
+            android:textColor="#555555"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTutorHourlyRate"
+            android:text="R 0 / hr"
+            android:textSize="15sp"
+            android:textColor="#007bff"
+            android:layout_marginTop="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>

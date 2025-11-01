@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FAFAFA"
+    android:fitsSystemWindows="true">  <!-- ✅ prevents content from going under notification bar -->
+
+    <!-- Page title -->
+    <TextView
+        android:id="@+id/txtBookingsTitle"
+        android:text="My Bookings"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="start" />
+
+    <!-- Loading indicator -->
+    <ProgressBar
+        android:id="@+id/progressBarTutor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- Empty state -->
+    <TextView
+        android:id="@+id/txtEmptyTutorBookings"
+        android:text="No bookings available."
+        android:textColor="#757575"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <!-- Bookings list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerBookingsTutor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

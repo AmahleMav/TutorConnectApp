@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Profile Picture -->
+        <ImageView
+            android:id="@+id/imgTutorProfile"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_person"
+            android:scaleType="centerCrop"
+            android:background="@drawable/profile_placeholder_background"
+            android:clipToOutline="true"
+            android:contentDescription="@string/tutor_image" />
+
+        <Button
+            android:id="@+id/btnChangeImage"
+            android:text="Change Image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/purple_500"
+            android:textColor="#FFFFFF" />
+
+        <!-- Tutor Info -->
+        <TextView
+            android:id="@+id/txtTutorName"
+            android:text="Tutor Name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTutorEmail"
+            android:text="Email: tutor@email.com"
+            android:textSize="16sp"
+            android:textColor="#444444"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTutorPhone"
+            android:text="Phone: 000 000 0000"
+            android:textSize="16sp"
+            android:textColor="#444444"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTutorExpertise"
+            android:text="Expertise: N/A"
+            android:textSize="16sp"
+            android:textColor="#444444"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTutorQualifications"
+            android:text="Qualifications: N/A"
+            android:textSize="16sp"
+            android:textColor="#444444"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSaveProfile"
+            android:text="Save Changes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/teal_700"
+            android:textColor="#FFFFFF" />
+
+        <!-- Slots Button -->
+        <Button
+            android:id="@+id/btnManageSlots"
+            android:text="Manage Time Slots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/purple_500"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnLogHours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Hours &amp; Ratings"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/purple_500"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+
+        <!-- Logout -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:text="Logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/red"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>

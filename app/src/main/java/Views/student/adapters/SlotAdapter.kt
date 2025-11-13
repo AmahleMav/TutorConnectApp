@@ -56,11 +56,9 @@ class SlotAdapter(
         // Click listener
         holder.btnBookSlot.setOnClickListener {
             if (slot.isAvailable) {
-                // Ensure tutorId is passed properly
                 if (slot.tutorId.isNotBlank()) {
                     onBookClicked(slot)
                 } else {
-                    // Safety check
                     android.widget.Toast.makeText(context, "Tutor not found for this slot.", android.widget.Toast.LENGTH_SHORT).show()
                 }
             }

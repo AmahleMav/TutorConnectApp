@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tutorconnect.R
 import com.example.tutorconnect.utils.loadProfileImage
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,24 +44,94 @@ class ChatAdapter(
 
         fun bind(chat: Chat) {
             val otherUserId = if (currentUserRole == "Student") chat.TutorId else chat.StudentId
-            val collection = if (currentUserRole == "Student") "Tutors" else "Students"
 
-            // Load name + image
-            db.collection(collection).document(otherUserId)
-                .get()
-                .addOnSuccessListener { doc ->
-                    val name = "${doc.getString("Name") ?: "Unknown"} ${doc.getString("Surname") ?: ""}".trim()
-                    val imageBase64 = doc.getString("ProfileImageBase64")
+            // Prefer preloaded fields from Chat model
+            val nameFromModel = if (currentUserRole == "Student") chat.TutorName else chat.StudentName
+            val imageBase64FromModel = if (currentUserRole == "Student") chat.TutorImageBase64 else chat.StudentImageBase64
 
-                    txtName.text = name
-                    CoroutineScope(Dispatchers.Main).launch {
-                        imgProfile.loadProfileImage(imageBase64)
+            // Set name if available (fallback to Unknown)
+            txtName.text = if (!nameFromModel.isNullOrBlank()) nameFromModel else "Unknown"
+
+            // Debug log: what adapter sees
+            android.util.Log.d(
+                "ChatAdapter",
+                "bind() chat=${chat.ChatId} role=$currentUserRole modelImageLen=${imageBase64FromModel?.length ?: 0}"
+            )
+
+            // If model already contains image use it (preferred)
+            if (!imageBase64FromModel.isNullOrBlank()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        imgProfile.loadProfileImage(imageBase64FromModel)
+                    } catch (ex: Exception) {
+                        android.util.Log.e("ChatAdapter", "Error loading image for ${chat.ChatId}: ${ex.message}")
+                        imgProfile.setImageResource(R.drawable.ic_person)
                     }
                 }
-                .addOnFailureListener {
-                    txtName.text = "Unknown"
-                    imgProfile.setImageResource(R.drawable.ic_person)
+            } else {
+                // Minimal fallback: query the collection that actually stores the profile image for the role
+                if (currentUserRole == "Student") {
+                    // For Students viewing chats, tutor images typically live in TutorProfiles
+                    db.collection("TutorProfiles")
+                        .whereEqualTo("UserId", otherUserId)
+                        .get()
+                        .addOnSuccessListener { snap ->
+                            val doc = snap.documents.firstOrNull()
+                            val fallbackBase64 = doc?.getString("ProfileImageBase64").orEmpty()
+                            val fallbackName = listOfNotNull(doc?.getString("Name"), doc?.getString("Surname")).joinToString(" ")
+                            if (fallbackName.isNotBlank() && nameFromModel.isNullOrBlank()) {
+                                chat.TutorName = fallbackName
+                                txtName.text = fallbackName
+                            }
+                            if (fallbackBase64.isNotBlank()) {
+                                chat.TutorImageBase64 = fallbackBase64 // update model to avoid future reads
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    try {
+                                        imgProfile.loadProfileImage(fallbackBase64)
+                                    } catch (ex: Exception) {
+                                        android.util.Log.e("ChatAdapter", "Fallback load failed for ${chat.ChatId}: ${ex.message}")
+                                        imgProfile.setImageResource(R.drawable.ic_person)
+                                    }
+                                }
+                            } else {
+                                imgProfile.setImageResource(R.drawable.ic_person)
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            android.util.Log.e("ChatAdapter", "Failed to fetch TutorProfiles fallback: ${e.message}")
+                            imgProfile.setImageResource(R.drawable.ic_person)
+                        }
+                } else {
+                    // For Tutors viewing chats, student images are in Students collection
+                    db.collection("Students").document(otherUserId)
+                        .get()
+                        .addOnSuccessListener { doc ->
+                            val fallbackBase64 = doc.getString("ProfileImageBase64").orEmpty()
+                            val fallbackName = listOfNotNull(doc.getString("Name"), doc.getString("Surname")).joinToString(" ")
+                            if (fallbackName.isNotBlank() && nameFromModel.isNullOrBlank()) {
+                                chat.StudentName = fallbackName
+                                txtName.text = fallbackName
+                            }
+                            if (fallbackBase64.isNotBlank()) {
+                                chat.StudentImageBase64 = fallbackBase64
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    try {
+                                        imgProfile.loadProfileImage(fallbackBase64)
+                                    } catch (ex: Exception) {
+                                        android.util.Log.e("ChatAdapter", "Fallback load failed for ${chat.ChatId}: ${ex.message}")
+                                        imgProfile.setImageResource(R.drawable.ic_person)
+                                    }
+                                }
+                            } else {
+                                imgProfile.setImageResource(R.drawable.ic_person)
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            android.util.Log.e("ChatAdapter", "Failed to fetch Student fallback: ${e.message}")
+                            imgProfile.setImageResource(R.drawable.ic_person)
+                        }
                 }
+            }
 
             // Last message preview
             if (chat.Messages.isNotEmpty()) {
@@ -74,12 +145,9 @@ class ChatAdapter(
                 txtLastMessage.text = "No messages yet"
             }
 
-            // Unread indicator logic (MVC style)
-            val shouldShowUnread = when (currentUserRole) {
-                "Student" -> chat.UnreadBy.contains(chat.StudentId)
-                "Tutor" -> chat.UnreadBy.contains(chat.TutorId)
-                else -> false
-            }
+            // Unread indicator logic: check current authenticated user id
+            val authUserId = FirebaseAuth.getInstance().currentUser?.uid
+            val shouldShowUnread = authUserId != null && chat.UnreadBy.contains(authUserId)
 
             if (shouldShowUnread) {
                 if (unreadDot.visibility != View.VISIBLE) fadeIn(unreadDot)

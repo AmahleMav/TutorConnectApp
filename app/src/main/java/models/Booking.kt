@@ -9,6 +9,7 @@ data class Booking(
     var tutorEmail: String = "",          // Tutor email
     var studentId: String = "",           // Student UID
     var studentName: String = "",         // Student display name
+    var studentEmail: String = "",        // Student email
     var day: String = "",                 // Day of session (e.g., Monday)
     var date: String = "",                // Date of session (e.g., 30/10/2025)
     var startHour: String = "",           // Start hour (e.g., "08:00")
@@ -24,7 +25,7 @@ data class Booking(
     var pricePaid: Double? = 0.0,        // Amount student paid
     var bookingDate: Timestamp? = null,
     var loggedAt: Timestamp? = null,
-    var hoursWorked: Int = 0,
+    var hoursWorked: Double = 0.0,
 
     var rating: Double? = null,
     var comment: String? = null,

@@ -20,4 +20,10 @@
     <color name="green_light">#d4f7d4</color> <!-- light green -->
     <color name="blue_light">#d4eaff</color>  <!-- light blue -->
     <color name="red_light">#ffd4d4</color>
+
+    <color name="card_stroke">#E6E6E6</color>
+
+    <color name="highlight_light">#E8F4FF</color>  <!-- light bluish tint -->
+    <color name="highlight_stroke">#CFE7FF</color> <!-- subtle border -->
+
 </resources>

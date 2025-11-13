@@ -1,6 +1,6 @@
 package Views.tutor.adapters
 
-import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,13 +23,16 @@ class TutorBookingAdapter(
     private val db = FirebaseFirestore.getInstance()
 
     inner class BookingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val txtName: TextView = view.findViewById(R.id.txtName)
-        val txtDateTime: TextView = view.findViewById(R.id.txtDateTime)
-        val txtSessionType: TextView = view.findViewById(R.id.txtSessionType)
+        val txtTutorName: TextView = view.findViewById(R.id.txtTutorName)
+        val txtTutorEmail: TextView = view.findViewById(R.id.txtTutorEmail)
+        val txtDay: TextView = view.findViewById(R.id.txtDay)
+        val txtDate: TextView = view.findViewById(R.id.txtDate)
+        val txtTime: TextView = view.findViewById(R.id.txtTime)
+        val txtType: TextView = view.findViewById(R.id.txtType)
         val txtStatus: TextView = view.findViewById(R.id.txtStatus)
-        val btnComplete: Button = view.findViewById(R.id.btnConfirm) // now Complete
+        val btnConfirm: Button = view.findViewById(R.id.btnConfirm)
         val btnCancel: Button = view.findViewById(R.id.btnCancel)
-        val btnChat: Button = view.findViewById(R.id.btnComplete) // now Chat
+        val btnChat: Button = view.findViewById(R.id.btnComplete)
         val actionLayout: ViewGroup = view.findViewById(R.id.actionLayout)
     }
 
@@ -39,35 +42,35 @@ class TutorBookingAdapter(
         return BookingViewHolder(view)
     }
 
+    override fun getItemCount(): Int = bookings.size
+
     override fun onBindViewHolder(holder: BookingViewHolder, position: Int) {
         val booking = bookings[position]
 
-        holder.txtName.text = "Student: ${booking.studentName ?: "N/A"}"
-        holder.txtDateTime.text = "${booking.day}, ${booking.time}"
-        holder.txtSessionType.text = "Type: ${booking.sessionType}"
-        holder.txtStatus.text = "Status: ${booking.status}"
+        holder.txtTutorName.text = "Student: ${booking.studentName.ifBlank { "N/A" }}"
+        holder.txtTutorEmail.text = "Email: ${booking.studentEmail ?: "N/A"}"
+        holder.txtDay.text = "Day: ${booking.day ?: ""}"
+        holder.txtDate.text = "Date of Session: ${booking.date ?: ""}"
+        holder.txtTime.text = "Time: ${booking.time ?: ""}"
+        holder.txtType.text = "Type: ${booking.sessionType ?: "One-on-One"}"
 
-        // Hide action buttons if cancelled or completed
+        val status = booking.status ?: "Upcoming"
+        holder.txtStatus.text = "Status: $status"
+        when (status.lowercase()) {
+            "completed", "complete" -> holder.txtStatus.setTextColor(Color.parseColor("#2E7D32"))
+            "cancelled", "canceled" -> holder.txtStatus.setTextColor(Color.parseColor("#D32F2F"))
+            else -> holder.txtStatus.setTextColor(Color.parseColor("#F39C12"))
+        }
+
         holder.actionLayout.visibility =
             if (booking.isCancelled || booking.isCompleted) View.GONE else View.VISIBLE
 
-        // Complete button
-        holder.btnComplete.text = if (!booking.isCompleted) "Complete" else "Completed"
-        holder.btnComplete.isEnabled = !booking.isCompleted
-        holder.btnComplete.setOnClickListener {
-            markBookingComplete(booking, holder)
-        }
+        holder.btnConfirm.text = if (!booking.isCompleted) "Complete" else "Completed"
+        holder.btnConfirm.isEnabled = !booking.isCompleted
 
-        // Cancel button
-        holder.btnCancel.setOnClickListener {
-            cancelBooking(booking, holder)
-        }
-
-        // Chat button
-        holder.btnChat.text = "Chat"
-        holder.btnChat.setOnClickListener {
-            onActionClick?.invoke(booking, "chat")
-        }
+        holder.btnConfirm.setOnClickListener { markBookingComplete(booking, holder) }
+        holder.btnCancel.setOnClickListener { cancelBooking(booking, holder) }
+        holder.btnChat.setOnClickListener { onActionClick?.invoke(booking, "chat") }
     }
 
     private fun markBookingComplete(booking: Booking, holder: BookingViewHolder) {
@@ -77,18 +80,17 @@ class TutorBookingAdapter(
                     .update(
                         "IsCompleted", true,
                         "Status", "Completed",
-                        "CompletionTimestamp", FieldValue.serverTimestamp(),
-                        "UpdatedAt", FieldValue.serverTimestamp()
+                        "CompletionTimestamp", FieldValue.serverTimestamp()
                     ).await()
 
-                // Update local object
                 booking.isCompleted = true
                 booking.status = "Completed"
 
                 CoroutineScope(Dispatchers.Main).launch {
                     holder.txtStatus.text = "Status: Completed"
-                    holder.btnComplete.text = "Completed"
-                    holder.btnComplete.isEnabled = false
+                    holder.txtStatus.setTextColor(Color.parseColor("#2E7D32"))
+                    holder.btnConfirm.text = "Completed"
+                    holder.btnConfirm.isEnabled = false
                     holder.actionLayout.visibility = View.GONE
                     Toast.makeText(
                         holder.itemView.context,
@@ -96,9 +98,14 @@ class TutorBookingAdapter(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
             } catch (e: Exception) {
-                e.printStackTrace()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        holder.itemView.context,
+                        "Failed: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -110,19 +117,15 @@ class TutorBookingAdapter(
                     .update(
                         "Status", "Cancelled",
                         "IsCancelled", true,
-                        "AmountEarned", 0,
-                        "HoursWorked", 0,
                         "UpdatedAt", FieldValue.serverTimestamp()
                     ).await()
 
-                // Update local object
-                booking.status = "Cancelled"
                 booking.isCancelled = true
-                booking.amountEarned = 0.0
-                booking.hoursWorked = 0
+                booking.status = "Cancelled"
 
                 CoroutineScope(Dispatchers.Main).launch {
                     holder.txtStatus.text = "Status: Cancelled"
+                    holder.txtStatus.setTextColor(Color.parseColor("#D32F2F"))
                     holder.actionLayout.visibility = View.GONE
                     Toast.makeText(
                         holder.itemView.context,
@@ -130,14 +133,17 @@ class TutorBookingAdapter(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
             } catch (e: Exception) {
-                e.printStackTrace()
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        holder.itemView.context,
+                        "Failed: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
-
-    override fun getItemCount(): Int = bookings.size
 
     fun updateBookings(newBookings: List<Booking>) {
         bookings.clear()

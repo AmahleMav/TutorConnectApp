@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F9FA"
@@ -12,6 +13,30 @@
         android:layout_height="match_parent"
         android:padding="24dp">
 
+        <!-- Welcome message -->
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to TutorConnect"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#0D6EFD"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="center"/>
+
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your learning journey starts here"
+            android:textSize="16sp"
+            android:textColor="#6c757d"
+            android:layout_gravity="center"
+            android:paddingBottom="24dp"/>
+
         <!-- Card-like container -->
         <LinearLayout
             android:orientation="vertical"
@@ -20,44 +45,70 @@
             android:background="@drawable/card_background_mvc"
             android:elevation="8dp"
             android:padding="24dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="80dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Login"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:textColor="#212529"
                 android:paddingBottom="16dp"/>
 
-            <EditText
-                android:id="@+id/etEmail"
+            <!-- Email with icon -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:minHeight="48dp"
-                android:background="@drawable/edittext_background_mvc"
-                android:padding="12dp"
-                android:textColor="#212529"
-                android:textColorHint="#6c757d"/>
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/gray"
+                app:boxStrokeColor="#CED4DA"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
-                android:id="@+id/etPassword"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#212529"
+                    android:textColorHint="#6c757d"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password with icon and toggle -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
-                android:background="@drawable/edittext_background_mvc"
-                android:padding="12dp"
-                android:textColor="#212529"
-                android:textColorHint="#6c757d"/>
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/gray"
+                app:endIconMode="password_toggle"
+                app:boxStrokeColor="#CED4DA"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:textColor="#212529"
+                    android:textColorHint="#6c757d"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Login Button -->
             <Button
                 android:id="@+id/btnLogin"
                 android:text="Login"
@@ -68,17 +119,19 @@
                 android:textColor="#FFFFFF"
                 android:minHeight="48dp"/>
 
+            <!-- Register Link -->
             <TextView
                 android:id="@+id/tvRegisterLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:minHeight="48dp"
                 android:text="Don't have an account? Register"
                 android:textColor="#0D6EFD"
-                android:textSize="16sp"
-                android:layout_gravity="center"/>
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

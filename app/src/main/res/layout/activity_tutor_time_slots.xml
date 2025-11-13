@@ -25,7 +25,74 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RecyclerView to display available slots -->
+    <!-- Filter Row (Weighted Layout, No Sort Spinner) -->
+    <HorizontalScrollView
+        android:id="@+id/filtersScroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/txtHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:id="@+id/filtersRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:gravity="center_vertical">
+
+            <!-- Day Spinner -->
+            <Spinner
+                android:id="@+id/spinnerDay"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:paddingHorizontal="8dp"
+                android:background="@drawable/spinner_background"/>
+
+            <!-- Session Type Spinner -->
+            <Spinner
+                android:id="@+id/spinnerSessionType"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:paddingHorizontal="8dp"
+                android:background="@drawable/spinner_background"/>
+
+            <!-- Availability Spinner -->
+            <Spinner
+                android:id="@+id/spinnerAvailability"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:paddingHorizontal="8dp"
+                android:background="@drawable/spinner_background"/>
+
+            <!-- Clear Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearFilters"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:minHeight="48dp"
+                android:text="Clear"
+                android:textSize="14sp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSlots"
         android:layout_width="0dp"
@@ -34,13 +101,13 @@
         android:paddingTop="8dp"
         android:paddingBottom="80dp"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@id/txtHeader"
+        app:layout_constraintTop_toBottomOf="@id/filtersScroll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_slot" />
 
-    <!-- ProgressBar for loading -->
+    <!-- ProgressBar -->
     <ProgressBar
         android:id="@+id/progressBarSlots"
         android:layout_width="64dp"
@@ -52,7 +119,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Empty-state message -->
+    <!-- Empty Message -->
     <TextView
         android:id="@+id/txtEmptySlots"
         android:layout_width="wrap_content"
@@ -61,14 +128,14 @@
         android:textSize="16sp"
         android:textColor="@color/dark_gray"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/txtHeader"
+        app:layout_constraintTop_toBottomOf="@id/filtersScroll"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
         android:padding="12dp" />
 
-    <!-- Floating refresh button (optional manual refresh) -->
+    <!-- Refresh Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnRefreshSlots"
         android:layout_width="wrap_content"
@@ -76,12 +143,10 @@
         android:contentDescription="Refresh slots"
         android:src="@drawable/ic_refresh"
         android:tint="@color/white"
-        android:visibility="visible"
         app:backgroundTint="@color/primary"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

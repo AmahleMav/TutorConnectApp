@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F9FA"
@@ -33,80 +34,143 @@
                 android:layout_gravity="center"
                 android:paddingBottom="16dp"/>
 
-            <EditText
-                android:id="@+id/etName"
+            <!-- Name -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:background="@drawable/edittext_background_mvc"
-                android:padding="12dp"
-                android:textColor="#212529"
-                android:textColorHint="#6c757d"
-                android:layout_marginBottom="8dp"/>
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="@color/gray"
+                app:boxStrokeColor="#CED4DA"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
-                android:id="@+id/etSurname"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:textColor="#212529"
+                    android:textColorHint="#6c757d"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Surname -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Surname"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:background="@drawable/edittext_background_mvc"
-                android:padding="12dp"
-                android:textColor="#212529"
-                android:textColorHint="#6c757d"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="8dp"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="@color/gray"
+                app:boxStrokeColor="#CED4DA"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
-                android:id="@+id/etPhone"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSurname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Surname"
+                    android:inputType="textPersonName"
+                    android:textColor="#212529"
+                    android:textColorHint="#6c757d"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Phone -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Phone Number"
-                android:inputType="phone"
-                android:minHeight="48dp"
-                android:background="@drawable/edittext_background_mvc"
-                android:padding="12dp"
-                android:textColor="#212529"
-                android:textColorHint="#6c757d"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="8dp"
+                app:startIconDrawable="@drawable/ic_phone"
+                app:startIconTint="@color/gray"
+                app:boxStrokeColor="#CED4DA"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
-                android:id="@+id/etEmail"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Phone Number"
+                    android:inputType="phone"
+                    android:textColor="#212529"
+                    android:textColorHint="#6c757d"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Email -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:minHeight="48dp"
-                android:background="@drawable/edittext_background_mvc"
-                android:padding="12dp"
-                android:textColor="#212529"
-                android:textColorHint="#6c757d"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="8dp"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/gray"
+                app:boxStrokeColor="#CED4DA"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
 
-            <EditText
-                android:id="@+id/etPassword"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#212529"
+                    android:textColorHint="#6c757d"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
-                android:background="@drawable/edittext_background_mvc"
-                android:padding="12dp"
-                android:textColor="#212529"
-                android:textColorHint="#6c757d"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginTop="8dp"
+                app:startIconDrawable="@drawable/ic_lock"
+                app:startIconTint="@color/gray"
+                app:endIconMode="password_toggle"
+                app:boxStrokeColor="#CED4DA"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:textColor="#212529"
+                    android:textColorHint="#6c757d"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Register Button -->
             <Button
                 android:id="@+id/btnRegister"
                 android:text="Register"
+                android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#007BFF"
                 android:textColor="#FFFFFF"
                 android:minHeight="48dp"/>
 
+            <!-- Error Message -->
             <TextView
                 android:id="@+id/tvError"
                 android:textColor="#DC3545"

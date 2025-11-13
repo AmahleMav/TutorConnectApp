@@ -1,60 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     android:background="@drawable/item_background">
 
+    <!-- Student Name -->
     <TextView
-        android:id="@+id/txtName"
+        android:id="@+id/txtTutorName"
         android:text="Student: Jane Doe"
-        android:textStyle="bold"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:textColor="#212121"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
+    <!-- Student Email -->
     <TextView
-        android:id="@+id/txtDateTime"
-        android:text="Monday, 08:00 - 09:00"
+        android:id="@+id/txtTutorEmail"
+        android:text="Email: student@gmail.com"
         android:textSize="14sp"
         android:textColor="#555555"
         android:layout_marginTop="2dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
+    <!-- Day of Session -->
     <TextView
-        android:id="@+id/txtSessionType"
+        android:id="@+id/txtDay"
+        android:text="Day: Thursday"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Date of Session -->
+    <TextView
+        android:id="@+id/txtDate"
+        android:text="Date of Session: 30/10/2025"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/txtTime"
+        android:text="Time: 08:00 - 09:00"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Session Type -->
+    <TextView
+        android:id="@+id/txtType"
         android:text="Type: One-on-One"
         android:textSize="14sp"
         android:textColor="#388E3C"
         android:layout_marginTop="2dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
+    <!-- Status -->
     <TextView
         android:id="@+id/txtStatus"
-        android:text="Status: Pending"
+        android:text="Status: Upcoming"
         android:textSize="14sp"
-        android:textColor="#1976D2"
-        android:layout_marginTop="2dp"
+        android:textStyle="bold"
+        android:textColor="#F39C12"
+        android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
-    <!-- Action buttons layout -->
+    <!-- Action Buttons -->
     <LinearLayout
         android:id="@+id/actionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="8dp"
-        android:weightSum="3"
-        android:paddingHorizontal="4dp">
+        android:layout_marginTop="12dp"
+        android:weightSum="3">
 
-        <!-- Complete button (previously Confirm) -->
+        <!-- Complete -->
         <Button
             android:id="@+id/btnConfirm"
             android:text="Complete"
@@ -65,10 +99,9 @@
             android:backgroundTint="#00796B"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:minWidth="0dp"
             android:paddingHorizontal="4dp" />
 
-        <!-- Cancel button -->
+        <!-- Cancel -->
         <Button
             android:id="@+id/btnCancel"
             android:text="Cancel"
@@ -79,10 +112,9 @@
             android:backgroundTint="#D32F2F"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:minWidth="0dp"
             android:paddingHorizontal="4dp" />
 
-        <!-- Chat button (previously Complete) -->
+        <!-- Chat -->
         <Button
             android:id="@+id/btnComplete"
             android:text="Chat"
@@ -92,7 +124,6 @@
             android:backgroundTint="#6A1B9A"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:minWidth="0dp"
             android:paddingHorizontal="4dp" />
     </LinearLayout>
 

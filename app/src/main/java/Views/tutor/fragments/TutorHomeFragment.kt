@@ -1,18 +1,18 @@
 package com.example.tutorconnect.Views.tutor.fragments
 
+import Views.tutor.fragments.TutorBookingsFragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RatingBar
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.tutorconnect.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.ListenerRegistration
 
 class TutorHomeFragment : Fragment() {
 
@@ -20,8 +20,10 @@ class TutorHomeFragment : Fragment() {
     private val auth = FirebaseAuth.getInstance()
     private val currentTutorId = auth.currentUser?.uid ?: ""
 
-    private lateinit var ratingBarAverage: RatingBar
-    private lateinit var txtTutorRating: TextView
+    private lateinit var btnViewBookings: Button
+    private lateinit var txtUpcomingSessions: TextView
+
+    private var bookingsListener: ListenerRegistration? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,41 +31,61 @@ class TutorHomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_tutor_home, container, false)
 
-        ratingBarAverage = view.findViewById(R.id.ratingBarAverage)
-        txtTutorRating = view.findViewById(R.id.txtTutorRating)
+        txtUpcomingSessions = view.findViewById(R.id.txtUpcomingSessions)
+        btnViewBookings = view.findViewById(R.id.btnViewBookings)
 
-        fetchAndDisplayAverageRating()
+        // Start real-time listener that counts bookings with status "Upcoming"
+        startUpcomingCountListener()
+
+        btnViewBookings.setOnClickListener {
+            try {
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.tutor_fragment_container, TutorBookingsFragment())
+                    .addToBackStack(null)
+                    .commit()
+            } catch (e: Exception) {
+                Log.e("TutorHomeFragment", "Failed to open TutorBookingsFragment: ${e.message}", e)
+            }
+        }
 
         return view
     }
 
-    private fun fetchAndDisplayAverageRating() {
-        if (currentTutorId.isEmpty()) return
-
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // Get all bookings for this tutor
-                val bookingsSnapshot = db.collection("Bookings")
-                    .whereEqualTo("TutorId", currentTutorId)
-                    .get()
-                    .await()
-
-                val ratings = bookingsSnapshot.documents.mapNotNull { it.getLong("Rating")?.toFloat() }
-
-                val averageRating = if (ratings.isNotEmpty()) ratings.average().toFloat() else 0f
-                val totalReviews = ratings.size
-
-                withContext(Dispatchers.Main) {
-                    ratingBarAverage.rating = averageRating
-                    txtTutorRating.text = "⭐ %.1f ($totalReviews reviews)".format(averageRating)
-                }
-            } catch (e: Exception) {
-                Log.e("TutorHomeFragment", "Error fetching tutor ratings: ${e.message}", e)
-                withContext(Dispatchers.Main) {
-                    ratingBarAverage.rating = 0f
-                    txtTutorRating.text = "⭐ 0.0 (0 reviews)"
-                }
-            }
+    private fun startUpcomingCountListener() {
+        if (currentTutorId.isEmpty()) {
+            txtUpcomingSessions.text = "0"
+            return
         }
+
+        // Listen for any changes to bookings for this tutor, then count those with status == "Upcoming"
+        bookingsListener = db.collection("Bookings")
+            .whereEqualTo("TutorId", currentTutorId)
+            .addSnapshotListener { snapshots, error ->
+                if (error != null) {
+                    Log.e("TutorHomeFragment", "Error listening for bookings: ${error.message}", error)
+                    txtUpcomingSessions.text = "0"
+                    return@addSnapshotListener
+                }
+
+                if (snapshots == null) {
+                    txtUpcomingSessions.text = "0"
+                    return@addSnapshotListener
+                }
+
+                var count = 0
+                for (doc in snapshots.documents) {
+                    val status = (doc.getString("Status") ?: doc.getString("status") ?: "")
+                    if (status.equals("Upcoming", ignoreCase = true)) {
+                        count++
+                    }
+                }
+
+                txtUpcomingSessions.text = count.toString()
+            }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bookingsListener?.remove()
     }
 }

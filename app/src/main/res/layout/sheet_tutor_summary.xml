@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvSheetTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutor Summary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center_horizontal" />
+
+    <!-- Stat Cards Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:weightSum="3">
+
+        <include
+            android:id="@+id/cardHours"
+            layout="@layout/stat_card_small" />
+
+        <include
+            android:id="@+id/cardSessions"
+            layout="@layout/stat_card_small" />
+
+        <include
+            android:id="@+id/cardRating"
+            layout="@layout/stat_card_small" />
+    </LinearLayout>
+
+    <!-- Button -->
+    <Button
+        android:id="@+id/btnOpenDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Detailed View"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/primary"
+        android:layout_marginTop="16dp"
+        android:paddingVertical="10dp" />
+</LinearLayout>

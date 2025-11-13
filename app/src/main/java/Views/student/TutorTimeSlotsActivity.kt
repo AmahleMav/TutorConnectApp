@@ -4,7 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -12,23 +13,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tutorconnect.R
 import Views.student.adapters.SlotAdapter
-import com.example.tutorconnect.services.BookingResult
 import com.example.tutorconnect.services.BookingService
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import models.Booking
+import kotlinx.coroutines.withContext
 import models.TimeSlot
 import java.util.*
 
 class TutorTimeSlotsActivity : AppCompatActivity() {
 
+    private val TAG = "TutorTimeSlotsActivity"
+
     private lateinit var recyclerSlots: RecyclerView
-    private lateinit var progressBar: ProgressBar
+    private lateinit var progressBar: View
     private lateinit var refreshButton: FloatingActionButton
+
+    private lateinit var spinnerDay: Spinner
+    private lateinit var spinnerSessionType: Spinner
+    private lateinit var spinnerAvailability: Spinner
+    private lateinit var btnClearFilters: MaterialButton
 
     private val bookingService = BookingService()
     private val auth = FirebaseAuth.getInstance()
@@ -38,6 +47,10 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
     private lateinit var tutorName: String
     private var tutorProfile: Map<String, Any>? = null
 
+    private val daysOfWeek = listOf("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+    private val allSlots = mutableListOf<TimeSlot>()
+    private var filteredSlots: List<TimeSlot> = listOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutor_time_slots)
@@ -45,6 +58,10 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
         recyclerSlots = findViewById(R.id.recyclerSlots)
         progressBar = findViewById(R.id.progressBarSlots)
         refreshButton = findViewById(R.id.btnRefreshSlots)
+        spinnerDay = findViewById(R.id.spinnerDay)
+        spinnerSessionType = findViewById(R.id.spinnerSessionType)
+        spinnerAvailability = findViewById(R.id.spinnerAvailability)
+        btnClearFilters = findViewById(R.id.btnClearFilters)
 
         recyclerSlots.layoutManager = LinearLayoutManager(this)
 
@@ -57,6 +74,25 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
             return
         }
 
+        spinnerDay.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOf("All") + daysOfWeek)
+        spinnerSessionType.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOf("All", "One-on-One", "Group"))
+        spinnerAvailability.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOf("All", "Available", "Booked"))
+
+        val itemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>, view: View?, position: Int, id: Long) { applyFiltersAndRefresh() }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+        }
+        spinnerDay.onItemSelectedListener = itemSelectedListener
+        spinnerSessionType.onItemSelectedListener = itemSelectedListener
+        spinnerAvailability.onItemSelectedListener = itemSelectedListener
+
+        btnClearFilters.setOnClickListener {
+            spinnerDay.setSelection(0)
+            spinnerSessionType.setSelection(0)
+            spinnerAvailability.setSelection(0)
+            applyFiltersAndRefresh()
+        }
+
         loadTutorProfile()
         refreshButton.setOnClickListener { loadSlots() }
     }
@@ -66,12 +102,12 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
         recyclerSlots.visibility = View.GONE
 
         val tutorRef = FirebaseFirestore.getInstance().collection("TutorProfiles").whereEqualTo("UserId", tutorId)
-
         slotsListener?.remove()
         slotsListener = tutorRef.addSnapshotListener { snapshot, error ->
             if (error != null) {
                 Toast.makeText(this, "Error loading tutor profile.", Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
+                Log.e(TAG, "Firestore snapshot error: ${error.message}")
                 return@addSnapshotListener
             }
 
@@ -81,18 +117,19 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
                 return@addSnapshotListener
             }
 
-            val doc = snapshot.documents[0]
-            tutorProfile = doc.data
+            tutorProfile = snapshot.documents[0].data
             loadSlots()
         }
     }
 
     private fun loadSlots() {
-        if (tutorProfile == null) return
+        if (tutorProfile == null) {
+            progressBar.visibility = View.GONE
+            return
+        }
 
         val weeklyAvailability = tutorProfile?.get("WeeklyAvailability") as? Map<String, Any> ?: emptyMap()
-        val daysOfWeek = listOf("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
-        val slots = mutableListOf<TimeSlot>()
+        val tempSlots = mutableListOf<TimeSlot>()
 
         for (day in daysOfWeek) {
             val daySlots = weeklyAvailability[day] as? List<Map<String, Any>> ?: emptyList()
@@ -100,18 +137,19 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
                 val hour = (slotData["Hour"] as? Number)?.toInt() ?: 8
                 val isAvailable = slotData["IsAvailable"] as? Boolean ?: false
                 val isGroup = slotData["IsGroup"] as? Boolean ?: false
+                val maxStudents = (slotData["MaxStudents"] as? Number)?.toInt() ?: 1
                 val groupPrice = (slotData["GroupPricePerHour"] as? Number)?.toDouble() ?: 0.0
                 val oneOnOnePrice = (slotData["OneOnOnePricePerHour"] as? Number)?.toDouble() ?: 0.0
                 val time = String.format("%02d:00 - %02d:00", hour, hour + 1)
 
-                slots.add(
+                tempSlots.add(
                     TimeSlot(
                         tutorId = tutorId,
                         day = day,
                         time = time,
                         sessionType = if (isGroup) "Group" else "One-on-One",
                         isAvailable = isAvailable,
-                        maxStudents = (slotData["MaxStudents"] as? Number)?.toInt() ?: 1,
+                        maxStudents = maxStudents,
                         groupPricePerHour = groupPrice,
                         oneOnOnePricePerHour = oneOnOnePrice
                     )
@@ -119,15 +157,75 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
             }
         }
 
-        slots.sortWith(compareBy({ daysOfWeek.indexOf(it.day) }, { it.time.substringBefore(":").toInt() }))
+        // Merge consecutive group slots as before
+        val mergedSlots = mutableListOf<TimeSlot>()
+        val groupedByDay = tempSlots.groupBy { it.day }
 
-        recyclerSlots.adapter = SlotAdapter(slots) { slot ->
-            if (slot.isAvailable) bookSlot(slot)
-            else Toast.makeText(this, "This slot is not available.", Toast.LENGTH_SHORT).show()
+        for ((day, slots) in groupedByDay) {
+            val sortedSlots = slots.sortedBy { safeParseStartHour(it.time) }
+            var i = 0
+            while (i < sortedSlots.size) {
+                val current = sortedSlots[i]
+                if (current.sessionType == "Group") {
+                    var startHour = safeParseStartHour(current.time)
+                    var endHour = startHour + 1
+                    var maxStudents = current.maxStudents
+                    var anyAvailable = current.isAvailable
+
+                    var j = i + 1
+                    while (j < sortedSlots.size && sortedSlots[j].sessionType == "Group" &&
+                        safeParseStartHour(sortedSlots[j].time) == endHour
+                    ) {
+                        endHour++
+                        maxStudents += sortedSlots[j].maxStudents
+                        anyAvailable = anyAvailable || sortedSlots[j].isAvailable
+                        j++
+                    }
+
+                    mergedSlots.add(current.copy(
+                        time = String.format("%02d:00 - %02d:00", startHour, endHour),
+                        maxStudents = maxStudents,
+                        isAvailable = anyAvailable // we will fix availability next
+                    ))
+
+                    i = j
+                } else {
+                    mergedSlots.add(current)
+                    i++
+                }
+            }
         }
 
-        progressBar.visibility = View.GONE
-        recyclerSlots.visibility = if (slots.isEmpty()) View.GONE else View.VISIBLE
+        // Dynamically update group slot availability based on existing bookings
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = FirebaseFirestore.getInstance()
+            val updatedSlots = mergedSlots.map { slot ->
+                if (slot.sessionType == "Group") {
+                    try {
+                        val bookedCount = db.collection("Bookings")
+                            .whereEqualTo("TutorId", slot.tutorId)
+                            .whereEqualTo("Day", slot.day)
+                            .whereEqualTo("Hour", safeParseStartHour(slot.time))
+                            .whereEqualTo("IsGroup", true)
+                            .whereEqualTo("IsCancelled", false)
+                            .get()
+                            .await()
+                            .size()
+
+                        slot.copy(isAvailable = bookedCount < slot.maxStudents)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to compute group availability", e)
+                        slot
+                    }
+                } else slot
+            }
+
+            withContext(Dispatchers.Main) {
+                allSlots.clear()
+                allSlots.addAll(updatedSlots.sortedWith(compareBy({ daysOfWeek.indexOf(it.day) }, { safeParseStartHour(it.time) })))
+                applyFiltersAndRefresh()
+            }
+        }
     }
 
     private fun bookSlot(slot: TimeSlot) {
@@ -235,6 +333,40 @@ class TutorTimeSlotsActivity : AppCompatActivity() {
     }
 
 
+    private fun applyFiltersAndRefresh() {
+        var list = allSlots.toList()
+
+        val selectedDay = spinnerDay.selectedItem as? String
+        if (!selectedDay.isNullOrEmpty() && selectedDay != "All") list = list.filter { it.day.equals(selectedDay, true) }
+
+        val selectedSession = spinnerSessionType.selectedItem as? String
+        if (!selectedSession.isNullOrEmpty() && selectedSession != "All") list = list.filter { it.sessionType.equals(selectedSession, true) }
+
+        val selectedAvailability = spinnerAvailability.selectedItem as? String
+        if (!selectedAvailability.isNullOrEmpty() && selectedAvailability != "All") {
+            list = list.filter { slot ->
+                when (selectedAvailability) {
+                    "Available" -> slot.isAvailable
+                    "Booked" -> !slot.isAvailable
+                    else -> true
+                }
+            }
+        }
+
+        filteredSlots = list
+        recyclerSlots.adapter = SlotAdapter(filteredSlots) { slot ->
+            if (slot.isAvailable) bookSlot(slot)
+            else Toast.makeText(this, "This slot is not available.", Toast.LENGTH_SHORT).show()
+        }
+
+        progressBar.visibility = View.GONE
+        recyclerSlots.visibility = if (filteredSlots.isEmpty()) View.GONE else View.VISIBLE
+        findViewById<View>(R.id.txtEmptySlots).visibility = if (filteredSlots.isEmpty()) View.VISIBLE else View.GONE
+    }
+
+    private fun safeParseStartHour(timeRange: String): Int {
+        return try { timeRange.substringBefore(":").toIntOrNull() ?: 0 } catch (e: Exception) { 0 }
+    }
 
 
     override fun onDestroy() {
